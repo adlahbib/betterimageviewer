@@ -3,7 +3,8 @@ if (document.toString() == '[object ImageDocument]') {
 	const FIT_NONE = 0;
 	const FIT_WIDTH = 1;
 	const FIT_HEIGHT = 2;
-	const FIT_BOTH = 3;
+    const FIT_BOTH = 3;
+    var angle=0;
 	let BetterImageViewer = {
 		_currentZoom: null,
 		_zoomedToFit: FIT_BOTH,
@@ -40,7 +41,7 @@ if (document.toString() == '[object ImageDocument]') {
 			let toolbar = document.createElement('div');
 			toolbar.id = 'toolbar';
 			toolbar.appendChild(document.createElement('div'));
-			for (let tool of ['zoomIn', 'zoomOut', 'zoom1', 'zoomFit', 'zoomFitWidth', 'zoomFitHeight', 'donate']) {
+			for (let tool of ['zoomIn', 'zoomOut', 'zoom1', 'zoomFit', 'zoomFitWidth', 'zoomFitHeight', 'rotateLeft', 'rotateRight', 'donate']) {
 				let button = document.createElement('button');
 				button.id = tool;
 				toolbar.appendChild(button);
@@ -103,6 +104,13 @@ if (document.toString() == '[object ImageDocument]') {
 			}
 			this.zoomCentered(Math.min(minZoomX, minZoomY, 0));
 			this._zoomedToFit = which;
+        },
+        rotate: function(which = 0) {
+            angle = (angle + (which ? -90 : 90)) % 360;
+            if (which==0)
+                this.image.style.transform = "rotate("+angle+"deg) translateY(-100%)";
+            else if(which==1)
+                this.image.style.transform = "rotate("+angle+"deg) translateY(-100%)";
 		},
 		zoomCentered: function(z) {
 			let { clientWidth, clientHeight } = document.body;
@@ -205,7 +213,13 @@ if (document.toString() == '[object ImageDocument]') {
 						return;
 					case 'zoomFitHeight':
 						this.zoomToFit(FIT_HEIGHT);
-						return;
+                        return;
+                    case 'rotateLeft':
+                        this.rotate(0);
+                        return;
+                    case 'rotateRight':
+                        this.rotate(1);
+                        return;
 					case 'donate':
 						window.open('https://darktrojan.github.io/donate.html?betterimageviewer');
 						return;
@@ -322,7 +336,15 @@ if (document.toString() == '[object ImageDocument]') {
 					this.zoomCentered(0);
 					event.preventDefault();
 					break;
-				}
+                }
+                case '':
+                    this.rotate(0);//left
+                    event.preventDefault();
+                    break;
+                case '':
+                    this.rotate(1);//right
+                    event.preventDefault();
+                    break;
 				break;
 			case 'keydown':
 				switch (event.code) {
