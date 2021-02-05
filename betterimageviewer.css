@@ -60,6 +60,12 @@ body:not([data-idle]) #toolbar:hover {
 #zoomFitHeight {
 	background-image: url("zoomFitHeight.svg");
 }
+#rotateLeft{
+	background-image: url("rotL.svg");
+}
+#rotateRight{
+	background-image: url("rotR.svg");
+}
 #donate {
 	background-image: url("donate.svg");
 }
